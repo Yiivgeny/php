@@ -56,18 +56,17 @@ ENV PHP_EXTRA_CONFIGURE_ARGS --enable-fpm --with-fpm-user=www-data --with-fpm-gr
 # Make PHP's main executable position-independent (improves ASLR security mechanism, and has no performance impact on x86_64)
 # Enable optimization (-O2)
 # Enable linker optimization (this sorts the hash buckets to improve cache locality, and is non-default)
-# Adds GNU HASH segments to generated executables (this is used if present, and is much faster than sysv hash; in this configuration, sysv hash is also generated)
 # https://github.com/docker-library/php/issues/272
 # -D_LARGEFILE_SOURCE and -D_FILE_OFFSET_BITS=64 (https://www.php.net/manual/en/intro.filesystem.php)
 ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
 ENV PHP_CPPFLAGS="$PHP_CFLAGS"
-ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
+ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 
 ENV GPG_KEYS 42670A7FE4D0441C8E4632349E4FDC074A4EF02D 5A52880781F755608BF815FC910DEB46F53EA312
 
-ENV PHP_VERSION 7.4.3
-ENV PHP_URL="https://www.php.net/get/php-7.4.3.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.4.3.tar.xz.asc/from/this/mirror"
-ENV PHP_SHA256="cf1f856d877c268124ded1ede40c9fb6142b125fdaafdc54f855120b8bc6982a" PHP_MD5=""
+ENV PHP_VERSION 7.4.7
+ENV PHP_URL="https://www.php.net/distributions/php-7.4.7.tar.xz" PHP_ASC_URL="https://www.php.net/distributions/php-7.4.7.tar.xz.asc"
+ENV PHP_SHA256="53558f8f24cd8ab6fa0ea252ca8198e2650160649681ce5230c1df1dc2b52faf" PHP_MD5=""
 
 RUN set -eux; \
 	\
@@ -141,7 +140,7 @@ RUN set -eux; \
 		--with-config-file-path="$PHP_INI_DIR" \
 		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
 		\
-# make sure invalid --configure-flags are fatal errors intead of just warnings
+# make sure invalid --configure-flags are fatal errors instead of just warnings
 		--enable-option-checking=fatal \
 		\
 # https://github.com/docker-library/php/issues/439
